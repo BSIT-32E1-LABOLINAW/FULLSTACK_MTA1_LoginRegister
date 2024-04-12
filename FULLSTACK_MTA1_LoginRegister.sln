@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FULLSTACK_MTA1_LoginRegister", "FULLSTACK_MTA1_LoginRegister\FULLSTACK_MTA1_LoginRegister.csproj", "{004A783F-7F5C-47D7-809C-085BA7060A41}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{004A783F-7F5C-47D7-809C-085BA7060A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{004A783F-7F5C-47D7-809C-085BA7060A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{004A783F-7F5C-47D7-809C-085BA7060A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{004A783F-7F5C-47D7-809C-085BA7060A41}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98DE8B4F-EE7D-4989-8AE9-CEEB65F07615}
+	EndGlobalSection
+EndGlobal
