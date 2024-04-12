@@ -93,3 +93,49 @@ namespace FULLSTACK_MTA1_LoginRegister.Controllers.AccountController
     {
         _context = context;
     }
+    private bool UserExists(string username)
+    {
+        return _context.Users.Any(u => u.Username == username);
+    }
+
+    private bool IsUsernameValid(string username)
+    {
+        return username.Length >= 6 && !username.Contains(" ");
+    }
+
+    private int IncrementLoginAttempt()
+    {
+        var attempts = HttpContext.Session.GetInt32("LoginAttempts") ?? 0;
+        attempts++;
+        HttpContext.Session.SetInt32("LoginAttempts", attempts);
+        return attempts;
+    }
+
+    private bool IsPasswordValid(string password)
+    {
+        var passwordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$");
+        return passwordRegex.IsMatch(password);
+    }
+
+    private string HashPassword(string password)
+    {
+        byte[] salt;
+        new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+        var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
+        byte[] hash = pbkdf2.GetBytes(20);
+        byte[] hashBytes = new byte[36];
+        Array.Copy(salt, 0, hashBytes, 0, 16);
+        Array.Copy(hash, 0, hashBytes, 16, 20);
+        return Convert.ToBase64String(hashBytes);
+    }
+
+    private bool VerifyPassword(string enteredPassword, string hashedPassword)
+    {
+        byte[] hashBytes = Convert.FromBase64String(hashedPassword);
+        byte[] salt = new byte[16];
+        Array.Copy(hashBytes, 0, salt, 0, 16);
+        var pbkdf2 = new Rfc2898DeriveBytes(enteredPassword, salt, 10000);
+        byte[] hash = pbkdf2.GetBytes(20);
+        return hashBytes.Skip(16).SequenceEqual(hash);
+    }
+}
