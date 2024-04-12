@@ -7,19 +7,13 @@ namespace FULLSTACK_MTA1_LoginRegister.Controllers.AccountController
     using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
     using System.Security.Cryptography;
     using System.Text.RegularExpressions;
+    using Microsoft.EntityFrameworkCore;
 
 
     public class AccountController : Controller
     {
-        private readonly AppDbContext _context;
-        private const int LoginAttempts = 3;
-
-        public AccountController(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        // LOGIN SECTION
+      
+        // User Account Login
         public IActionResult Login()
         {
             return View();
@@ -54,4 +48,48 @@ namespace FULLSTACK_MTA1_LoginRegister.Controllers.AccountController
             else
                 ModelState.AddModelError("", $"You have exceeded the maximum number of login attempts. Please try again later or re-register.");
         }
+    }
+    //User Account Registration 
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Register(User user)
+    {
+        if (ModelState.IsValid)
+        {
+            if (UserExists(user.Username))
+            {
+                ModelState.AddModelError("", "Username already exists. Please choose a different one.");
+                return View(user);
+            }
+
+            if (!IsUsernameValid(user.Username))
+            {
+                ModelState.AddModelError("", "Username must be at least 6 characters long and cannot contain spaces.");
+                return View(user);
+            }
+
+            if (!IsPasswordValid(user.Password))
+            {
+                ModelState.AddModelError("", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+                return View(user);
+            }
+
+            user.Password = HashPassword(user.Password);
+            _context.Users.Add(user);
+            _context.SaveChanges();
+            return RedirectToAction("Login");
+        }
+        return View(user);
+    }
+    // User Login Attempts
+    private readonly AppDbContext _context;
+    private const int LoginAttempts = 3;
+
+    public AccountController(AppDbContext context)
+    {
+        _context = context;
     }
